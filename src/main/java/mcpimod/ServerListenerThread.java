@@ -1,6 +1,6 @@
 /*
  * Copyright 2012-2024 RaspberryJuice project
- * Copyright 2024 [your name]
+ * Copyright 2024 UserNameBlank
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
