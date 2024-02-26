@@ -3,11 +3,11 @@
   "id": "mcpimod",
   "version": "${version}",
   "name": "McpiMod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "An implementation of the Minecraft Pi Socket API for FabricMC",
   "authors": ["Me!"],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/UserNameBlank/McpiMod",
+    "sources": "https://github.com/UserNameBlank/McpiMod"
   },
   "license": "CC0-1.0",
   "icon": "assets/mcpimod/icon.png",
@@ -26,4 +26,3 @@
     "another-mod": "*"
   }
 }
-
