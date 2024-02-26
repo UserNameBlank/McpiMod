@@ -31,6 +31,8 @@ bin/
 # fabric
 
 run/
+.factorypath
+.github
 
 # java
 
