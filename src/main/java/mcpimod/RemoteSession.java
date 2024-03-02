@@ -77,7 +77,7 @@ public class RemoteSession {
 
   public boolean pendingRemoval = false;
 
-  private static int MAX_COMMANDS_PER_TICK = 9000;
+  public static int MAX_COMMANDS_PER_TICK = 9000;
 
   public static void setMaxCommandsPerTick(MinecraftServer _server, GameRules.IntRule rule) {
     MAX_COMMANDS_PER_TICK = rule.get();
@@ -242,12 +242,12 @@ public class RemoteSession {
           int x = (int) pos.x;
           int y = (int) pos.y;
           int z = (int) pos.z;
-          send(x + "," + (y - 1) + "," + z);
+          send(x + "," + y + "," + z);
         }
 
         else if (c.equals("player.setTile")) {
           Vec3d pos = parseBlockPos(args).toCenterPos();
-          player.teleport(pos.x, pos.y + 1.0, pos.z);
+          player.teleport(pos.x, pos.y, pos.z);
         }
 
         else if (c.equals("player.getDirection")) {
@@ -321,12 +321,12 @@ public class RemoteSession {
           int x = (int) pos.x;
           int y = (int) pos.y;
           int z = (int) pos.z;
-          send(x + "," + (y - 1) + "," + z);
+          send(x + "," + y + "," + z);
         }
 
         else if (c.equals("entity.setTile")) {
           Vec3d pos = parseBlockPos(mArgs).toCenterPos();
-          entity.teleport(pos.x, pos.y + 1.0, pos.z);
+          entity.teleport(pos.x, pos.y, pos.z);
         }
 
         else if (c.equals("entity.getDirection")) {

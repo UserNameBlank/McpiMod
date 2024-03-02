@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
@@ -60,6 +61,11 @@ public class McpiMod implements ModInitializer {
       LOGGER.warn("McpiMod Initialization failed.");
       return;
     }
+
+    // sync the static variable with the game rule
+    ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+      RemoteSession.MAX_COMMANDS_PER_TICK = server.getGameRules().getInt(MAX_COMMANDS_PER_TICK);
+    });
 
     // Registering a tick event to execute the commands from the remote sessions
     ServerTickEvents.START_SERVER_TICK.register(server -> {
