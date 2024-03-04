@@ -25,11 +25,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mcpimod.utils.BlockEvent;
+import mcpimod.utils.ChatEvent;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
+import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.minecraft.item.SwordItem;
+import net.minecraft.util.ActionResult;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.GameRules.Category;
 
@@ -40,6 +46,9 @@ public class McpiMod implements ModInitializer {
   public static final GameRules.Key<GameRules.IntRule> MAX_COMMANDS_PER_TICK = GameRuleRegistry
       .register("mcpiMaxCommandsPerTick", Category.UPDATES,
           GameRuleFactory.createIntRule(9000, 0, Integer.MAX_VALUE, RemoteSession::setMaxCommandsPerTick));
+
+  public static final GameRules.Key<GameRules.BooleanRule> ONLY_COUNT_SWORD_HITS = GameRuleRegistry
+      .register("mcpiOnlyCountSwordHits", Category.MISC, GameRuleFactory.createBooleanRule(true));
 
   public ServerListenerThread serverThread;
 
@@ -79,6 +88,21 @@ public class McpiMod implements ModInitializer {
           s.tick(server.getOverworld());
         }
       }
+    });
+
+    AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
+      if (!world.isClient && !player.isSpectator()) {
+        if (!world.getGameRules().getBoolean(ONLY_COUNT_SWORD_HITS)
+            || player.getMainHandStack().getItem() instanceof SwordItem) {
+          RemoteSession.BLOCK_EVENTS.add(new BlockEvent(player, pos, direction));
+        }
+      }
+
+      return ActionResult.PASS;
+    });
+
+    ServerMessageEvents.CHAT_MESSAGE.register((message, player, _params) -> {
+      RemoteSession.CHAT_EVENTS.add(new ChatEvent(player, message.getSignedContent()));
     });
   }
 

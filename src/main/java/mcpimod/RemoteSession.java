@@ -34,9 +34,14 @@ import java.net.Socket;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
+import mcpimod.utils.BlockEvent;
+import mcpimod.utils.ChatEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -76,6 +81,9 @@ public class RemoteSession {
   private boolean closed = false;
 
   public boolean pendingRemoval = false;
+
+  public static LinkedList<BlockEvent> BLOCK_EVENTS = new LinkedList<>();
+  public static LinkedList<ChatEvent> CHAT_EVENTS = new LinkedList<>();
 
   public static int MAX_COMMANDS_PER_TICK = 9000;
 
@@ -294,7 +302,41 @@ public class RemoteSession {
           player.teleport(world, pos.x, pos.y, pos.z, player.getYaw(), pitch);
         }
 
-        // TODO: events
+        else if (c.equals("player.events.block.hits")) {
+          Iterator<BlockEvent> it = BLOCK_EVENTS.iterator();
+          LinkedList<BlockEvent> events = new LinkedList<>();
+          while (it.hasNext()) {
+            BlockEvent event = it.next();
+            if (event.entity.equals(player)) {
+              events.add(event);
+              it.remove();
+            }
+          }
+
+          send(String.join("|", events.stream().map(event -> event.serialize()).toList()));
+        }
+
+        else if (c.equals("player.events.chat.posts")) {
+          Iterator<ChatEvent> it = CHAT_EVENTS.iterator();
+          LinkedList<ChatEvent> events = new LinkedList<>();
+          while (it.hasNext()) {
+            ChatEvent event = it.next();
+            if (event.entity.equals(player)) {
+              events.add(event);
+              it.remove();
+            }
+          }
+
+          send(String.join("|", events.stream().map(event -> event.serialize()).toList()));
+        }
+
+        // TODO: projectile events
+
+        else if (c.equals("player.events.clear")) {
+          BLOCK_EVENTS.removeIf(event -> event.entity.equals(player));
+          CHAT_EVENTS.removeIf(event -> event.entity.equals(player));
+        }
+
       }
     }
 
@@ -378,7 +420,41 @@ public class RemoteSession {
           send(name);
         }
 
-        // TODO: events
+        else if (c.equals("entity.events.block.hits")) {
+          Iterator<BlockEvent> it = BLOCK_EVENTS.iterator();
+          LinkedList<BlockEvent> events = new LinkedList<>();
+          while (it.hasNext()) {
+            BlockEvent event = it.next();
+            if (event.entity.equals(entity)) {
+              events.add(event);
+              it.remove();
+            }
+          }
+
+          send(String.join("|", events.stream().map(event -> event.serialize()).toList()));
+        }
+
+        else if (c.equals("entity.events.chat.posts")) {
+          Iterator<ChatEvent> it = CHAT_EVENTS.iterator();
+          LinkedList<ChatEvent> events = new LinkedList<>();
+          while (it.hasNext()) {
+            ChatEvent event = it.next();
+            if (event.entity.equals(entity)) {
+              events.add(event);
+              it.remove();
+            }
+          }
+
+          send(String.join("|", events.stream().map(event -> event.serialize()).toList()));
+        }
+
+        // TODO: projectile events
+
+        else if (c.equals("entity.events.clear")) {
+          BLOCK_EVENTS.removeIf(event -> event.entity.equals(entity));
+          CHAT_EVENTS.removeIf(event -> event.entity.equals(entity));
+        }
+
       }
     }
 
@@ -394,7 +470,31 @@ public class RemoteSession {
       sendMessageToAll(world, chatMessage);
     }
 
-    // TODO: EVENTS commands
+    // EVENT commands
+
+    else if (c.startsWith("events")) {
+
+      if (c.equals("events.clear")) {
+        BLOCK_EVENTS.clear();
+        CHAT_EVENTS.clear();
+      }
+
+      if (c.equals("events.block.hits")) {
+        Stream<String> events = BLOCK_EVENTS.stream().map(event -> event.serialize());
+        send(String.join("|", events.toList()));
+        BLOCK_EVENTS.clear();
+      }
+
+      else if (c.equals("events.chat.posts")) {
+        Stream<String> events = CHAT_EVENTS.stream().map(event -> event.serialize());
+        send(String.join("|", events.toList()));
+        CHAT_EVENTS.clear();
+      }
+
+      // TODO: projectile events
+
+    }
+
   }
 
   private void sendMessageToAll(ServerWorld world, String msg) {

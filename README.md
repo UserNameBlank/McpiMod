@@ -7,6 +7,7 @@ A Fabric Mod which implements most of the Minecraft Pi Socket API. Currently onl
 You can configure the mod with custom gamerules:
 
 - `mcpiMaxCommandsPerTick` defines the maximum number of commands executed per game tick.
+- `mcpiOnlyCountSwordHits` defines if only blocks hit with a sword should count as block hits (event).
 
 ## Commands
 
@@ -28,6 +29,9 @@ Minecraft Pi:
 - `entity.setTile`
 - `entity.getPos`
 - `entity.setPos`
+- `(entity/player)pollBlockHits`
+- `(entity/player)pollChatPosts`
+- `(entity/player)clearEvents`
 
 RaspberryJuice:
 
@@ -44,7 +48,7 @@ RaspberryJuice:
 - `world.getBlockWithData`
 - setting (will probably be never implemented)
 - camera api
-- event api
+- projectile events
 
 # License
 
