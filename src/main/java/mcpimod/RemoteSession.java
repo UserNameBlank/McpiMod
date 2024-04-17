@@ -47,6 +47,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.FurnaceBlock;
 import net.minecraft.block.LadderBlock;
+import net.minecraft.block.RedstoneOreBlock;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.TntBlock;
@@ -814,6 +815,8 @@ public class RemoteSession {
         return Blocks.DIAMOND_BLOCK.getDefaultState();
       case 58:
         return Blocks.CRAFTING_TABLE.getDefaultState();
+      case 59:
+        return Blocks.WHEAT.getDefaultState();
       case 60:
         return Blocks.FARMLAND.getDefaultState();
       case 61:
@@ -835,6 +838,8 @@ public class RemoteSession {
           default:
             return Blocks.FURNACE.getDefaultState().with(FurnaceBlock.LIT, true);
         }
+      case 63:
+        return Blocks.OAK_SIGN.getDefaultState();
       case 64:
         return Blocks.OAK_DOOR.getDefaultState();
       case 65:
@@ -883,6 +888,8 @@ public class RemoteSession {
         return Blocks.IRON_DOOR.getDefaultState();
       case 73:
         return Blocks.REDSTONE_ORE.getDefaultState();
+      case 74:
+        return Blocks.REDSTONE_ORE.getDefaultState().with(RedstoneOreBlock.LIT, true);
       case 78:
         return Blocks.SNOW.getDefaultState();
       case 79:
@@ -897,10 +904,14 @@ public class RemoteSession {
         return Blocks.SUGAR_CANE.getDefaultState();
       case 85:
         return Blocks.OAK_FENCE.getDefaultState();
+      case 87:
+        return Blocks.NETHERRACK.getDefaultState();
       case 89:
         return Blocks.GLOWSTONE.getDefaultState();
       case 95:
         return Blocks.BARRIER.getDefaultState();
+      case 96:
+        return Blocks.OAK_TRAPDOOR.getDefaultState();
       case 98:
         switch (subId) {
           case 0:
@@ -918,8 +929,24 @@ public class RemoteSession {
         return Blocks.GLASS_PANE.getDefaultState();
       case 103:
         return Blocks.MELON.getDefaultState();
+      case 105:
+        return Blocks.MELON_STEM.getDefaultState();
       case 107:
         return Blocks.OAK_FENCE_GATE.getDefaultState(); // TODO: implement facing
+      case 108:
+        return Blocks.STONE_BRICK_STAIRS.getDefaultState();
+      case 112:
+        return Blocks.NETHER_BRICKS.getDefaultState();
+      case 114:
+        return Blocks.NETHER_BRICK_STAIRS.getDefaultState();
+      case 128:
+        return Blocks.SANDSTONE_STAIRS.getDefaultState();
+      case 155:
+        return Blocks.QUARTZ_BLOCK.getDefaultState();
+      case 156:
+        return Blocks.QUARTZ_STAIRS.getDefaultState();
+      case 245:
+        return Blocks.STONECUTTER.getDefaultState();
       case 246:
         return Blocks.CRYING_OBSIDIAN.getDefaultState();
       case 247:
